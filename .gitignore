@@ -1,1 +1,69 @@
 node_modules
+back/HELP.md
+back/.gradle
+back/build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+back/.apt_generated
+back/.classpath
+back/.factorypath
+back/.project
+back/.settings
+back/.springBeans
+back/.sts4-cache
+back/bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+back/.idea
+back/*.iws
+back/*.iml
+back/*.ipr
+back/out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+back/nbproject/private/
+back/nbbuild/
+back/dist/
+back/nbdist/
+back/.nb-gradle/
+
+### VS Code ###
+back/.vscode/
+
+
+# Created by https://www.toptal.com/developers/gitignore/api/gradle
+# Edit at https://www.toptal.com/developers/gitignore?templates=gradle
+
+### Gradle ###
+back/.gradle
+back/build/
+
+# Ignore Gradle GUI config
+back/gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+back/.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+### Gradle Patch ###
+**/build/
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+back/.project
+# JDT-specific (Eclipse Java Development Tools)
+back/.classpath
+
+# End of https://www.toptal.com/developers/gitignore/api/gradle
