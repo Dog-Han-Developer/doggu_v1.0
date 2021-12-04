@@ -1,0 +1,5 @@
+package com.doghandeveloper.doggu.account.domain;
+
+public enum UserRole {
+    ROLE_USER, ROLE_ADMIN
+}
