@@ -193,7 +193,7 @@ const template = `
             <div class="mb-6 text-center">
               <button
                 class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                type="submit">로그인</button>
+                type="submit" href"/#/pick">로그인</button>
             </div>
             
             <div class="text-center">
@@ -2274,34 +2274,7 @@ class Login {
     this.#fields.push(passwordField);
   };
   #onSubmit = e => {
-    e.preventDefault();
-    const loginData = this.#fields.map(field => ({
-      [field.name]: field.value
-    })).reduce((a, b) => ({ ...a,
-      ...b
-    }), {});
-
-    _axios.default.post('/api/authentication', loginData).then(result => {
-      return result.data.result;
-    }).then(({
-      id,
-      token
-    }) => {
-      const options = {
-        headers: {
-          token
-        }
-      };
-      this.#data.store.token = token;
-      return _axios.default.all([_axios.default.get(`/api/user/${id}`, options), _axios.default.get(`/api/user/${id}/posts`, options)]);
-    }).then(([profile, posts]) => {
-      this.#data.store.userProfile = profile.data.result;
-      this.#data.store.userPosts = posts.data.results;
-      location.href = '/#/profile';
-    }).catch(error => {
-      this.#loginFail = true;
-      this.render();
-    });
+    location.href = '/#/pick';
   };
   render = () => {
     this.#container.innerHTML = this.#template({ ...this.#data,
@@ -2709,7 +2682,92 @@ class Signup {
 }
 
 exports.default = Signup;
-},{"./signup.template":"src/page/signup.template.js","./views":"src/page/views/index.js"}],"src/index.js":[function(require,module,exports) {
+},{"./signup.template":"src/page/signup.template.js","./views":"src/page/views/index.js"}],"src/page/pick.template.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+const template = `
+<div class="container mx-auto my-60">
+    <div>
+        <div class="bg-white relative shadow-xl w-5/6 md:w-4/6  lg:w-3/6 xl:w-2/6 mx-auto">
+            <div class="flex justify-center">
+                <img src="{{userProfile.picture.large}}" alt="" class="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-2xl border-4 border-white">
+            </div>
+            
+            <div class="mt-16">
+                <h1 class="font-bold text-center text-3xl text-gray-900">
+                    {{userProfile.name.first}} {{userProfile.name.last}}
+                </h1>
+                <p class="text-center text-sm text-gray-400 font-medium">Full Stack Developer at Pantazi Software</p>
+                <div class="my-5">
+                    <a href="#" class="text-indigo-200 block text-center font-medium leading-6 px-6 py-3 bg-indigo-600">Connect with <span class="font-bold">{{userProfile.email}}</span></a>
+                </div>
+                <div class="flex justify-evenly my-5">
+                    <a href="#" class="bg font-bold text-sm text-blue-800 w-full text-center py-3 hover:bg-blue-800 hover:text-white hover:shadow-lg">Facebook</a>
+                    <a href="#" class="bg font-bold text-sm text-blue-400 w-full text-center py-3 hover:bg-blue-400 hover:text-white hover:shadow-lg">Twitter</a>
+                    <a href="#" class="bg font-bold text-sm text-yellow-600 w-full text-center py-3 hover:bg-yellow-600 hover:text-white hover:shadow-lg">Instagram</a>
+                    <a href="#" class="bg font-bold text-sm text-gray-600 w-full text-center py-3 hover:bg-gray-600 hover:text-white hover:shadow-lg">Email</a>
+                </div>
+
+                <div class="w-full">
+                    <h3 class="font-bold text-gray-600 text-left px-4">Recent Posts</h3>
+                    <div class="mt-5 w-full">
+                        {{#each posts}}
+                        <a href="#" class="w-full border-t-2 border-gray-100 font-medium text-gray-600 py-4 px-4 w-full block hover:bg-gray-100 transition duration-150">
+                            <img src="https://pantazisoft.com/img/avatar-2.jpeg" alt="" class="rounded-full h-6 shadow-md inline-block mr-2">
+                                {{title}}
+                                <span class="text-gray-400 text-sm">24 min ago</span>
+                        </a>
+                        {{/each}}                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+`;
+
+var _default = Handlebars.compile(template);
+
+exports.default = _default;
+},{}],"src/page/pick.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _pick = _interopRequireDefault(require("./pick.template"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class Pick {
+  #template = _pick.default;
+  #data;
+  #container;
+
+  constructor(container, data) {
+    this.#container = document.querySelector(container);
+    this.#data = data;
+    this.#initialize();
+  }
+
+  #initialize = () => {};
+  render = () => {
+    this.#container.innerHTML = this.#template({
+      userProfile: this.#data.store.userProfile,
+      posts: this.#data.store.userPosts
+    });
+  };
+}
+
+exports.default = Pick;
+},{"./pick.template":"src/page/pick.template.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _store = _interopRequireDefault(require("./store"));
@@ -2721,6 +2779,8 @@ var _profile = _interopRequireDefault(require("./page/profile"));
 var _pageNotFound = _interopRequireDefault(require("./page/page-not-found"));
 
 var _signup = _interopRequireDefault(require("./page/signup"));
+
+var _pick = _interopRequireDefault(require("./page/pick"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2753,6 +2813,13 @@ function router() {
       signup.render();
       break;
 
+    case '#/pick':
+      const pick = new _pick.default('#root', {
+        store
+      });
+      pick.render();
+      break;
+
     default:
       const pageNotFound = new _pageNotFound.default('#root');
       pageNotFound.render();
@@ -2762,7 +2829,7 @@ function router() {
 
 window.addEventListener('hashchange', router);
 document.addEventListener('DOMContentLoaded', router);
-},{"./store":"src/store.js","./page/login":"src/page/login.js","./page/profile":"src/page/profile.js","./page/page-not-found":"src/page/page-not-found.js","./page/signup":"src/page/signup.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./store":"src/store.js","./page/login":"src/page/login.js","./page/profile":"src/page/profile.js","./page/page-not-found":"src/page/page-not-found.js","./page/signup":"src/page/signup.js","./page/pick":"src/page/pick.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -2790,7 +2857,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8528" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12174" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

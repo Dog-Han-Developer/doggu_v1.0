@@ -3,6 +3,7 @@ import Login from './page/login';
 import Profile from './page/profile';
 import PageNotFound from './page/page-not-found';
 import Singup from './page/signup';
+import Pick from './page/pick';
 
 const store = new Store();
 
@@ -25,6 +26,10 @@ function router() {
     case '#/signup':
       const signup = new Singup('#root', { store });
       signup.render();
+      break;
+    case '#/pick':
+      const pick = new Pick('#root', { store });
+      pick.render();
       break;
     default:
       const pageNotFound = new PageNotFound('#root');
