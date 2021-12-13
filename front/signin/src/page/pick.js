@@ -1,5 +1,5 @@
-
 import template from './pick.template';
+import HorizontalScroll from 'react-scroll-horizontal'
 
 export default class Pick {
   #template = template;
@@ -19,8 +19,8 @@ export default class Pick {
 
   render = () => {
     this.#container.innerHTML = this.#template({
-      userProfile: this.#data.store.userProfile,
-      posts: this.#data.store.userPosts,
+      //userProfile: this.#data.store.userProfile,
+      //posts: this.#data.store.userPosts,
     });
   }
 }
