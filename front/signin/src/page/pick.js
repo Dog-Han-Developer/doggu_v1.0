@@ -17,10 +17,16 @@ export default class Pick {
     
   }
 
+  #on3DJS = e => {
+    console.log("!!!!")
+  }
+
   render = () => {
     this.#container.innerHTML = this.#template({
       //userProfile: this.#data.store.userProfile,
       //posts: this.#data.store.userPosts,
     });
+    
+    this.#container.addEventListener('submit', this.#on3DJS);
   }
 }

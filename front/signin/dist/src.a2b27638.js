@@ -193,7 +193,7 @@ const template = `
             <div class="mb-6 text-center">
               <button
                 class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                type="submit" href"/#/pick">로그인</button>
+                type="submit">로그인</button>
             </div>
             
             <div class="text-center">
@@ -2700,7 +2700,7 @@ const template = `
         <div
           class="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 "
         >
-          <div class="inline-block px-3">
+          <div class="inline-block px-3"
             <div
               class="w-64 h-64 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out"
             ></div>
@@ -35209,10 +35209,14 @@ class Pick {
   }
 
   #initialize = () => {};
+  #on3DJS = e => {
+    console.log("!!!!");
+  };
   render = () => {
     this.#container.innerHTML = this.#template({//userProfile: this.#data.store.userProfile,
       //posts: this.#data.store.userPosts,
     });
+    this.#container.addEventListener('submit', this.#on3DJS);
   };
 }
 
