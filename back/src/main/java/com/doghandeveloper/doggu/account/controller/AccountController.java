@@ -42,14 +42,15 @@ public class AccountController {
     }
 
     @GetMapping("/{userName}")
-    @Operation(summary = "닉네임 중복 체크", description = "닉네임을 전달받아 중복된 닉네임이 있는지 확인합니다.", responses = {
+    @Operation(summary = "사용자이름 중복 체크", description = "사용자이름을 전달받아 중복된 사용자이름이 있는지 확인합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "닉네임 중복 체크 성공", content = @Content(schema = @Schema(implementation = Boolean.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "사용자이름 중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<Boolean> checkDuplicateNickname(@PathVariable String userName) {
-        Boolean result = accountService.checkDuplicateUserName(userName);
-        return ResponseEntity.ok().body(result);
+    public ResponseEntity<Void> checkDuplicateNickname(@PathVariable String userName) {
+        accountService.checkDuplicateUserName(userName);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")

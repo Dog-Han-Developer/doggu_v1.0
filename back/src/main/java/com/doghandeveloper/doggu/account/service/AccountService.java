@@ -55,10 +55,11 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicateUserName(String userName) {
-        return accountRepository.existsByUserName(userName);
+    public void checkDuplicateUserName(String userName) {
+        if(accountRepository.existsByUserName(userName)){
+            throw new AuthException(ErrorCode.DUPLICATED_NICKNAME);
+        }
     }
-
 
     public RefreshResponse refreshAccessToken(RefreshRequest refreshRequest, HttpServletRequest request) {
         String refreshToken = refreshRequest.getRefreshToken();
