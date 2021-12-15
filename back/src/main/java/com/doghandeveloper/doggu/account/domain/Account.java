@@ -31,8 +31,9 @@ public class Account {
     @Column(unique = true)
     private String userName;
 
-//    @Enumerated(EnumType.STRING)
-//    private DogModel dogModel;
+    @Column(name = "dogModel")
+    @Enumerated(EnumType.STRING)
+    private DogModel dogModel;
 
     @CreationTimestamp
     private LocalDateTime createdDate;
@@ -41,19 +42,19 @@ public class Account {
     private LocalDateTime updatedDate;
 
     //TODO : 추후 확장성을 위해 일대다로 변경
-    @OneToOne
-    @JoinColumn(name = "dog_id")
+    @OneToOne(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private Dog dog;
 
     @Builder
-    public Account(UserRole role, String email, String password, String userName) {
+    public Account(UserRole role, String email, String password, String userName, DogModel dogModel) {
         this.role = role;
         this.email = email;
         this.password = password;
         this.userName = userName;
+        this.dogModel = dogModel;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void updateDogModel(String dogModel){
+        this.dogModel = DogModel.valueOf(dogModel);
     }
 }

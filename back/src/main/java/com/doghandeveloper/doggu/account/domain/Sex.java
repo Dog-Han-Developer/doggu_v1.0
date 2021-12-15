@@ -1,5 +1,5 @@
 package com.doghandeveloper.doggu.account.domain;
 
-public enum Gender {
+public enum Sex {
     M,F
 }
