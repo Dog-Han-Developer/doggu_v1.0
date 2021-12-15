@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +29,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
-
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Tag(name = "Account", description = "사용자 API")
@@ -37,6 +39,9 @@ import java.io.IOException;
 public class AccountController {
 
     private final AccountService accountService;
+    @Value("${spring.profiles.include}")
+    private String apiKey;
+
 
     @PostMapping
     @Operation(summary = "회원가입", description = "회원 정보를 전달 받아 저장합니다.", responses = {
@@ -71,7 +76,7 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/verifiedDog")
+    @PostMapping("/dog-authentication")
     @Operation(summary = "강아지 인증", description = "견주 이름과 동물등록번호를 입력해 인증을 해줍니다. ",security = @SecurityRequirement(name = "Authorization"), responses = {
             @ApiResponse(responseCode = "200", description = "인증 성공", content = @Content(schema = @Schema(implementation = AuthResponse.class))),
             @ApiResponse(responseCode = "401", description = "견주 이름 또는 동물등록번호 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
@@ -79,8 +84,9 @@ public class AccountController {
     })
     public ResponseEntity<String> verifiedDog(@Valid @RequestBody DogRegistrationRequest dogRegistrationRequest) throws IOException {
 
+
         StringBuilder urlBuilder = new StringBuilder("http://openapi.animal.go.kr/openapi/service/rest/animalInfoSrvc/animalInfo"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=29nouRYoYNQ0S%2Bke%2Fg3HcAhixhMl%2FzxQptHDekBEuiv8TcJNPubgCUwcBVIhxRx%2Ba8lKUv%2BGvyP8JSiGBJbDwQ%3D%3D");
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + apiKey);
         urlBuilder.append("&" + URLEncoder.encode("dog_reg_no","UTF-8") + "=" + URLEncoder.encode(dogRegistrationRequest.getRegisterNumber(), "UTF-8")); /*동물등록번호*/
         urlBuilder.append("&" + URLEncoder.encode("owner_nm","UTF-8") + "=" + URLEncoder.encode(dogRegistrationRequest.getOwnerName(), "UTF-8")); /*소유자 성명*/
         URL url = new URL(urlBuilder.toString());
