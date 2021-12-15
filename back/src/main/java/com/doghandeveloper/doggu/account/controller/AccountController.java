@@ -144,7 +144,7 @@ public class AccountController {
     @PostMapping("/email")
     @Operation(summary = "이메일 인증번호 전송", description = "이메일 인증번호를 전송합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
             @ApiResponse(responseCode = "200", description = "이메일 인증번호 전송 성공", content = @Content(schema = @Schema(implementation = RefreshResponse.class))),
-            @ApiResponse(responseCode = "401", description = "인증번호 전송 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "400", description = "인증번호 전송 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<EmailAuthenticationResponse> sendEmailAuthenticationCode(@Valid @RequestBody EmailAuthenticationRequest emailAuthenticationRequest, HttpServletRequest request) {
@@ -154,7 +154,7 @@ public class AccountController {
     @PostMapping("/email/{verifiedCode}")
     @Operation(summary = "이메일 인증번호 확인", description = "이메일 인증번호가 유효한지 확인합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
             @ApiResponse(responseCode = "200", description = "이메일 인증번호 확인 성공", content = @Content(schema = @Schema(implementation = RefreshResponse.class))),
-            @ApiResponse(responseCode = "401", description = "인증정보 확인 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "400", description = "인증정보 확인 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<EmailAuthenticationCodeResponse> checkEmailAuthenticationCode(@Valid @PathVariable String verifiedCode, HttpServletRequest request) {

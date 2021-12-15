@@ -27,8 +27,6 @@ public enum ErrorCode {
 
     INCORRECT_IMAGE_LENGTH(400, "IMG_001", "이미지는 최대 5개까지 입력 가능합니다."),
 
-    HEALING_CONTENT_NOT_FOUND(404, "HC_001", "힐링 콘텐츠를 찾을 수 없습니다."),
-
     EMAIL_SEND_FAIL_ERROR(500, "ES_001", "Email 송신에 실패하였습니다");
     private final int status;
     private final String code;
