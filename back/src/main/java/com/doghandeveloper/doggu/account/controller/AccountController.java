@@ -1,11 +1,16 @@
 package com.doghandeveloper.doggu.account.controller;
 
+import com.doghandeveloper.doggu.account.domain.Dog;
+import com.doghandeveloper.doggu.account.dto.request.EmailAuthenticationRequest;
 import com.doghandeveloper.doggu.account.dto.request.LoginRequest;
 import com.doghandeveloper.doggu.account.dto.request.RefreshRequest;
 import com.doghandeveloper.doggu.account.dto.request.SignupRequest;
 import com.doghandeveloper.doggu.account.dto.response.AuthResponse;
+import com.doghandeveloper.doggu.account.dto.response.EmailAuthenticationCodeResponse;
+import com.doghandeveloper.doggu.account.dto.response.EmailAuthenticationResponse;
 import com.doghandeveloper.doggu.account.dto.response.RefreshResponse;
 import com.doghandeveloper.doggu.account.service.AccountService;
+import com.doghandeveloper.doggu.common.util.EmailSendUtil;
 import com.doghandeveloper.doggu.common.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,13 +18,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Random;
+
+import org.springframework.mail.javamail.JavaMailSender;
 
 @Tag(name = "Account", description = "사용자 API")
 @RestController
@@ -28,6 +47,7 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final AccountService accountService;
+    private final EmailSendUtil emailSendUtil;
 
     @PostMapping
     @Operation(summary = "회원가입", description = "회원 정보를 전달 받아 저장합니다.", responses = {
@@ -72,5 +92,27 @@ public class AccountController {
     public ResponseEntity<RefreshResponse> refreshAccessToken(@Valid @RequestBody RefreshRequest refreshRequest, HttpServletRequest request) {
         RefreshResponse refreshResponse = accountService.refreshAccessToken(refreshRequest, request);
         return ResponseEntity.ok().body(refreshResponse);
+    }
+
+    @PostMapping("/email")
+    @Operation(summary = "이메일 인증번호 전송", description = "이메일 인증번호를 전송합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
+            @ApiResponse(responseCode = "200", description = "이메일 인증번호 전송 성공", content = @Content(schema = @Schema(implementation = RefreshResponse.class))),
+            @ApiResponse(responseCode = "401", description = "인증번호 전송 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<EmailAuthenticationResponse> sendEmailAuthenticationCode(@Valid @RequestBody EmailAuthenticationRequest emailAuthenticationRequest, HttpServletRequest request) {
+        EmailAuthenticationResponse emailAuthenticationResponse = emailSendUtil.sendEmailAuthenticationCode(emailAuthenticationRequest.getEmail());
+        return ResponseEntity.ok().body(emailAuthenticationResponse);
+    }
+    @PostMapping("/email/{verifiedCode}")
+    @Operation(summary = "이메일 인증번호 확인", description = "이메일 인증번호가 유효한지 확인합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
+            @ApiResponse(responseCode = "200", description = "이메일 인증번호 확인 성공", content = @Content(schema = @Schema(implementation = RefreshResponse.class))),
+            @ApiResponse(responseCode = "401", description = "인증정보 확인 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<EmailAuthenticationCodeResponse> checkEmailAuthenticationCode(@Valid @PathVariable String verifiedCode, HttpServletRequest request) {
+        Boolean isValidEmail = emailSendUtil.getUserEmailByCode(verifiedCode);
+        EmailAuthenticationCodeResponse emailAuthenticationCodeResponse = new EmailAuthenticationCodeResponse(isValidEmail);
+        return ResponseEntity.ok().body(emailAuthenticationCodeResponse);
     }
 }
