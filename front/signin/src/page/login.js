@@ -30,35 +30,7 @@ export default class Login {
   }
 
   #onSubmit = e => {
-    e.preventDefault();
-
-    const loginData = this.#fields
-      .map(field => ({ [field.name]: field.value }))
-      .reduce((a, b) => ({ ...a, ...b }), {});
-
-    axios.post('/api/authentication', loginData)
-      .then(result => {
-        return result.data.result;
-      })
-      .then(({ id, token }) => {
-        const options = { headers: { token } };
-        this.#data.store.token = token;
-
-        return axios.all([
-          axios.get(`/api/user/${id}`, options),
-          axios.get(`/api/user/${id}/posts`, options),
-        ]);
-      })
-      .then(([profile, posts]) => {
-        this.#data.store.userProfile = profile.data.result;
-        this.#data.store.userPosts = posts.data.results;
-
-        location.href = '/#/profile';
-      })
-      .catch(error => {      
-        this.#loginFail = true;
-        this.render();
-      });
+    location.href = '/#/pick';
   }
 
   render = () => {
