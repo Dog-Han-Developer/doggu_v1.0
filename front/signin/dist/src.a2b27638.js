@@ -2743,7 +2743,7 @@ const template = `
           </div>
         </div>
       </div>
-      <button type="button" onclick="location.href='http://localhost:1234';" value="Google">
+      <button type="button" onclick="location.href='http://localhost:1234';">
         Google
       </button>
 </div>
@@ -35316,7 +35316,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "10795" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14478" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

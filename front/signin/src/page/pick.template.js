@@ -53,7 +53,7 @@ const template = `
           </div>
         </div>
       </div>
-      <button type="button" onclick="location.href='http://localhost:1234';" value="Google">
+      <button type="button" onclick="location.href='http://localhost:1234';">
         Google
       </button>
 </div>
