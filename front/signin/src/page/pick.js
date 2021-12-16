@@ -17,8 +17,9 @@ export default class Pick {
     
   }
 
-  #on3DJS = e => {
-    console.log("!!!!")
+  #onSubmit = e => {
+    console.log("!")
+    location.href = '/#';
   }
 
   render = () => {
@@ -27,6 +28,6 @@ export default class Pick {
       //posts: this.#data.store.userPosts,
     });
     
-    this.#container.addEventListener('submit', this.#on3DJS);
+    this.#container.addEventListener('submit', this.#onSubmit);
   }
 }

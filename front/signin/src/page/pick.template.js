@@ -11,7 +11,7 @@ const template = `
         <div
           class="flex flex-nowrap lg:ml-40 md:ml-20 ml-10 "
         >
-          <div class="inline-block px-3"
+          <div class="inline-block px-3">
             <div
               class="w-64 h-64 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out"
             ></div>
@@ -53,6 +53,9 @@ const template = `
           </div>
         </div>
       </div>
+      <button type="button" onclick="location.href='http://localhost:1234';" value="Google">
+        Google
+      </button>
 </div>
 <style>
 .hide-scroll-bar {
