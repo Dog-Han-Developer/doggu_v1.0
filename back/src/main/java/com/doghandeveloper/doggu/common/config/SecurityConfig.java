@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(new RestAccessDeniedHandler())
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/accounts/login", "/accounts/refresh-token", "/accounts").permitAll()
+                .antMatchers(HttpMethod.POST, "/accounts/login", "/accounts/refresh-token", "/accounts", "/accounts/email/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/accounts/{nickname}").permitAll()
                 .antMatchers(HttpMethod.PATCH,"/accounts/**").hasRole("USER")
 //                .antMatchers("/articles/**", "/healing-content/content/**").hasRole("USER")
