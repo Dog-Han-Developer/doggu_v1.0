@@ -3,7 +3,7 @@ const template = `
   <div class="relative py-3 sm:max-w-xl sm:mx-auto">
 
     <div class="leading-loose">
-      <form id="sign-up-form" class="max-w-xl m-4 p-10 bg-white rounded shadow-xl">
+      <form id="sign-up-form" method="POST" class="max-w-xl m-4 p-10 bg-white rounded shadow-xl">
         <p class="text-gray-800 font-medium mb-5 text-center">{{title}}</p>
         <div id="required-fields">
         
