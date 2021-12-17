@@ -30,6 +30,7 @@ export default class Login {
   }
 
   #onSubmit = e => {
+    console.log("!!!!!!!")
     location.href = '/#/pick';
   }
 
