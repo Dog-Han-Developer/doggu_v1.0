@@ -4,10 +4,10 @@ const template = `
     <div class="flex justify-center px-6 my-12">
       <div class="w-full xl:w-3/4 lg:w-11/12 shadow-xl flex">
         <div class="w-full h-auto bg-gray-400 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg"
-          style="background-image: url('https://images.unsplash.com/photo-1559190394-df5a28aab5c5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3369&q=80')"></div>
+        style="background-image:url('./images/3dogs.jpg')"></div>
         <div class="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
           <h1 class="pt-4 text-4xl text-center mb-20">{{title}}</h1>
-          <form id="login-form" class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
+          <form id="login-form" method="POST" class="px-8 pt-6 pb-8 mb-4 bg-white rounded">
             <div id="login-fields">            
             </div>
             

@@ -8,31 +8,36 @@ const app = express();
 
 app.use(express.static('dist'));
 app.use(morgan('dev'));
-app.use(urlencoded({ extended: false }))
-app.use(json())
+app.use(urlencoded({ extended: false }));
+app.use(json());
 
 app.get('/api/user/:id', (req, res) => {
   if (!req.headers['token']) {
     return res.status(403).send({
-      status: 'Error'
+      status: 'Error',
     });
   }
 
-  axios.get('https://randomuser.me/api')
-    .then(result => {
-      const [userProfile] =  result.data.results;
+  axios
+    .post('https://doggu.kr/api/accounts/login')
+    .then((result) => {
+      const [userProfile] = result.data.results;
       const { name, picture, phone, email, country } = userProfile;
 
       res.status(200).send({
         status: 'OK',
         result: {
-          name, picture, phone, email, country
-        }
-      })
+          name,
+          picture,
+          phone,
+          email,
+          country,
+        },
+      });
     })
-    .catch(e => {
+    .catch((e) => {
       res.status(400).send({
-        status: 'Error'
+        status: 'Error',
       });
     });
 });
@@ -40,20 +45,21 @@ app.get('/api/user/:id', (req, res) => {
 app.get('/api/user/:id/posts', (req, res) => {
   if (!req.headers['token']) {
     return res.status(403).send({
-      status: 'Error'
+      status: 'Error',
     });
   }
 
-  axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${req.params.id}`)
-    .then(result => {
+  axios
+    .get(`https://jsonplaceholder.typicode.com/posts?userId=${req.params.id}`)
+    .then((result) => {
       res.status(200).send({
         status: 'OK',
-        results: result.data
-      })
+        results: result.data,
+      });
     })
-    .catch(e => {
+    .catch((e) => {
       res.status(400).send({
-        status: 'Error'
+        status: 'Error',
       });
     });
 });
@@ -63,14 +69,15 @@ app.post('/api/authentication', (req, res) => {
     res.status(200).send({
       status: 'OK',
       result: {
-        id: Math.floor(Math.random()*10),
+        id: Math.floor(Math.random() * 10),
         token: v4(),
-      }
+      },
     });
   } else {
-    console.log("!!!!")
-    res.status(400).sen;({
-      status: 'Error'
+    console.log('!!!!');
+    res.status(400).sen;
+    ({
+      status: 'Error',
     });
   }
 });
