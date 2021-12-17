@@ -1,4 +1,3 @@
-
 import template from './profile.template';
 
 export default class Profile {
@@ -14,15 +13,18 @@ export default class Profile {
   }
 
   #initialize = () => {
-    if (!this.#data.store.userProfile) {
+    if (sessionStorage.getItem('token') === null) {
       location.href = '/';
     }
-  }
+    // if (!this.#data.store.userProfile) {
+    //   location.href = '/';
+    // }
+  };
 
   render = () => {
     this.#container.innerHTML = this.#template({
       userProfile: this.#data.store.userProfile,
       posts: this.#data.store.userPosts,
     });
-  }
+  };
 }

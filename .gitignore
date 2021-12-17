@@ -5,6 +5,7 @@ back/build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+front/signin/dist/
 
 ### STS ###
 back/.apt_generated

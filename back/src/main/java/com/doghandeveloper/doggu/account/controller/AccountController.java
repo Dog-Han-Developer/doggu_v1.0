@@ -1,52 +1,36 @@
 package com.doghandeveloper.doggu.account.controller;
 
-import com.doghandeveloper.doggu.account.domain.Dog;
-import com.doghandeveloper.doggu.account.dto.request.EmailAuthenticationRequest;
-import com.doghandeveloper.doggu.account.dto.request.DogRegistrationRequest;
-import com.doghandeveloper.doggu.account.dto.request.LoginRequest;
-import com.doghandeveloper.doggu.account.dto.request.RefreshRequest;
-import com.doghandeveloper.doggu.account.dto.request.SignupRequest;
+import com.doghandeveloper.doggu.account.domain.Account;
+import com.doghandeveloper.doggu.account.dto.request.*;
 import com.doghandeveloper.doggu.account.dto.response.AuthResponse;
 import com.doghandeveloper.doggu.account.dto.response.EmailAuthenticationCodeResponse;
 import com.doghandeveloper.doggu.account.dto.response.EmailAuthenticationResponse;
 import com.doghandeveloper.doggu.account.dto.response.RefreshResponse;
 import com.doghandeveloper.doggu.account.service.AccountService;
-import com.doghandeveloper.doggu.common.util.EmailSendUtil;
 import com.doghandeveloper.doggu.common.exception.ErrorResponse;
+import com.doghandeveloper.doggu.common.security.CurrentAccount;
+import com.doghandeveloper.doggu.common.util.EmailSendUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Random;
-
-import org.springframework.mail.javamail.JavaMailSender;
-import java.net.URLEncoder;
-import java.net.URL;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.springframework.beans.factory.annotation.Value;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 
 @Tag(name = "Account", description = "사용자 API")
@@ -74,14 +58,38 @@ public class AccountController {
     }
 
     @GetMapping("/{userName}")
-    @Operation(summary = "닉네임 중복 체크", description = "닉네임을 전달받아 중복된 닉네임이 있는지 확인합니다.", responses = {
-            @ApiResponse(responseCode = "200", description = "닉네임 중복 체크 성공", content = @Content(schema = @Schema(implementation = Boolean.class))),
+    @Operation(summary = "사용자이름 중복 체크", description = "사용자이름을 전달받아 중복된 사용자이름이 있는지 확인합니다.", responses = {
+            @ApiResponse(responseCode = "204", description = "닉네임 중복 체크 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "사용자이름 중복", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Void> checkDuplicateNickname(@PathVariable String userName) {
+        accountService.checkDuplicateUserName(userName);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/dog-info")
+    @Operation(summary = "강아지 정보 저장 ", description = "강아지 정보를 전달받아 저장합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
+            @ApiResponse(responseCode = "204", description = "강아지 정보 저장 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<Boolean> checkDuplicateNickname(@PathVariable String userName) {
-        Boolean result = accountService.checkDuplicateUserName(userName);
-        return ResponseEntity.ok().body(result);
+    public ResponseEntity<Void> saveDogInfo(@Valid @RequestBody DogInfoRequest dogInfoRequest, @Parameter(hidden = true) @CurrentAccount Account account){
+        accountService.saveDogInfo(dogInfoRequest, account);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/dog-model")
+    @Operation(summary = "강아지 모델 등록(수정)", description = "강아지 모델을 선택합니다.",  security = @SecurityRequirement(name = "Authorization"), responses = {
+            @ApiResponse(responseCode = "204", description = "강아지 모델 등록(수정) 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "사용자 인증 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<Void> updateDogModel(@Schema(description = "강아지 모델", example = "보미") @RequestParam String dogModel, @Parameter(hidden = true) @CurrentAccount Account account){
+        accountService.updateDogModel(dogModel, account);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")
@@ -142,7 +150,7 @@ public class AccountController {
     }
 
     @PostMapping("/email")
-    @Operation(summary = "이메일 인증번호 전송", description = "이메일 인증번호를 전송합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
+    @Operation(summary = "이메일 인증번호 전송", description = "이메일 인증번호를 전송합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "이메일 인증번호 전송 성공", content = @Content(schema = @Schema(implementation = RefreshResponse.class))),
             @ApiResponse(responseCode = "400", description = "인증번호 전송 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -152,7 +160,7 @@ public class AccountController {
         return ResponseEntity.ok().body(emailAuthenticationResponse);
     }
     @PostMapping("/email/{verifiedCode}")
-    @Operation(summary = "이메일 인증번호 확인", description = "이메일 인증번호가 유효한지 확인합니다.", security = @SecurityRequirement(name = "Authorization"), responses = {
+    @Operation(summary = "이메일 인증번호 확인", description = "이메일 인증번호가 유효한지 확인합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "이메일 인증번호 확인 성공", content = @Content(schema = @Schema(implementation = RefreshResponse.class))),
             @ApiResponse(responseCode = "400", description = "인증정보 확인 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
