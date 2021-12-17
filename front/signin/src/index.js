@@ -4,6 +4,9 @@ import Profile from './page/profile';
 import PageNotFound from './page/page-not-found';
 import Singup from './page/signup';
 import Pick from './page/pick';
+import Doginfo from './page/doginfo';
+import dogHall from './page/dogHall';
+
 
 const store = new Store();
 
@@ -27,9 +30,17 @@ function router() {
       const signup = new Singup('#root', { store });
       signup.render();
       break;
+    case '#/doginfo':
+      const doginfo = new Doginfo('#root', { store });
+      doginfo.render();
+      break;
     case '#/pick':
       const pick = new Pick('#root', { store });
       pick.render();
+      break;
+    case '#/hall':
+      const hall = new dogHall('#root', { store });
+      hall.render();
       break;
     default:
       const pageNotFound = new PageNotFound('#root');

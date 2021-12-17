@@ -1,6 +1,7 @@
 package com.doghandeveloper.doggu.account.dto.request;
 
 import com.doghandeveloper.doggu.account.domain.Account;
+import com.doghandeveloper.doggu.account.domain.DogModel;
 import com.doghandeveloper.doggu.account.domain.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -41,6 +42,7 @@ public class SignupRequest {
                 .userName(userName)
                 .password(password)
                 .role(UserRole.ROLE_USER)
+                .dogModel(DogModel.NONE)
                 .build();
     }
 
