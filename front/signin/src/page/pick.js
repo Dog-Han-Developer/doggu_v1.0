@@ -19,7 +19,7 @@ export default class Pick {
 
   #onSubmit = e => {
     console.log("!")
-    location.href = '/#';
+    location.href = '/#/hall';
   }
 
   render = () => {

@@ -2743,7 +2743,7 @@ const template = `
           </div>
         </div>
       </div>
-      <button type="button" onclick="location.href='http://localhost:1234';">
+      <button type="button" onclick="location.href='http://localhost:1234/#/hall';">
         Google
       </button>
 </div>
@@ -35215,7 +35215,7 @@ class Pick {
   #initialize = () => {};
   #onSubmit = e => {
     console.log("!");
-    location.href = '/#';
+    location.href = '/#/hall';
   };
   render = () => {
     this.#container.innerHTML = this.#template({//userProfile: this.#data.store.userProfile,
@@ -35226,7 +35226,9 @@ class Pick {
 }
 
 exports.default = Pick;
-},{"./pick.template":"src/page/pick.template.js","react-scroll-horizontal":"node_modules/react-scroll-horizontal/dist/index.es.js"}],"src/index.js":[function(require,module,exports) {
+},{"./pick.template":"src/page/pick.template.js","react-scroll-horizontal":"node_modules/react-scroll-horizontal/dist/index.es.js"}],"src/page/dogHall.js":[function(require,module,exports) {
+
+},{}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _store = _interopRequireDefault(require("./store"));
@@ -35240,6 +35242,8 @@ var _pageNotFound = _interopRequireDefault(require("./page/page-not-found"));
 var _signup = _interopRequireDefault(require("./page/signup"));
 
 var _pick = _interopRequireDefault(require("./page/pick"));
+
+var _dogHall = _interopRequireDefault(require("./page/dogHall"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35279,6 +35283,13 @@ function router() {
       pick.render();
       break;
 
+    case '#/hall':
+      const hall = new _dogHall.default('#root', {
+        store
+      });
+      hall.render();
+      break;
+
     default:
       const pageNotFound = new _pageNotFound.default('#root');
       pageNotFound.render();
@@ -35288,7 +35299,7 @@ function router() {
 
 window.addEventListener('hashchange', router);
 document.addEventListener('DOMContentLoaded', router);
-},{"./store":"src/store.js","./page/login":"src/page/login.js","./page/profile":"src/page/profile.js","./page/page-not-found":"src/page/page-not-found.js","./page/signup":"src/page/signup.js","./page/pick":"src/page/pick.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./store":"src/store.js","./page/login":"src/page/login.js","./page/profile":"src/page/profile.js","./page/page-not-found":"src/page/page-not-found.js","./page/signup":"src/page/signup.js","./page/pick":"src/page/pick.js","./page/dogHall":"src/page/dogHall.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -35316,7 +35327,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14478" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "13291" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
