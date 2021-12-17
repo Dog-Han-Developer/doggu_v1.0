@@ -1,24 +1,28 @@
 import React from 'react';
 import {Canvas,useFrame} from '@react-three/fiber';
+import template from './dogHall.template';
 //import {OrbitControls} from '@react-three/drei';
 
-export default function(){
-  return(
-    <>
-      <Canvas>
-        <CoinMesh></CoinMesh>
-      </Canvas>
-    </>
-  )
-}
+export default class dogHall{
+  #template = template;
+  #data;
+  #container;
 
-function CoinMesh() {
-    const mesh = useRef(null);
-    useFrame(() => (mesh.current.rotation.y =  mesh.current.rotation.z += 0.01)); // #2
-    return (
-      <mesh ref={mesh} scale={0.7}>
-        <cylinderBufferGeometry args={[1, 1, 0.3, 50]} /> // #1
-        <meshLambertMaterial attach="material" color="#ff9800" />
-      </mesh>
-    );
+  constructor(container, data) {
+    this.#container = document.querySelector(container);
+    this.#data = data;
+
+    this.#initialize();
   }
+
+  #initialize = () => {
+    
+  }
+
+  render = () => {
+    this.#container.innerHTML = this.#template({
+      //userProfile: this.#data.store.userProfile,
+      //posts: this.#data.store.userPosts,
+    });
+  }
+}

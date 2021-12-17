@@ -96030,40 +96030,62 @@ reconciler.injectIntoDevTools({
   rendererPackageName: '@react-three/fiber',
   version: '17.0.2'
 });
-},{"three":"../../node_modules/three/build/three.module.js","react":"../../node_modules/react/index.js","zustand":"../../node_modules/zustand/index.js","react-reconciler":"../../node_modules/react-reconciler/index.js","scheduler":"../../node_modules/scheduler/index.js","use-asset":"../../node_modules/use-asset/dist/index.js","react-merge-refs":"../../node_modules/react-merge-refs/dist/react-merge-refs.esm.js","react-use-measure":"../../node_modules/react-use-measure/dist/web.js"}],"src/page/dogHall.js":[function(require,module,exports) {
+},{"three":"../../node_modules/three/build/three.module.js","react":"../../node_modules/react/index.js","zustand":"../../node_modules/zustand/index.js","react-reconciler":"../../node_modules/react-reconciler/index.js","scheduler":"../../node_modules/scheduler/index.js","use-asset":"../../node_modules/use-asset/dist/index.js","react-merge-refs":"../../node_modules/react-merge-refs/dist/react-merge-refs.esm.js","react-use-measure":"../../node_modules/react-use-measure/dist/web.js"}],"src/page/dogHall.template.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
+const template = `
+<>
+    <Canvas>
+    <CoinMesh></CoinMesh>
+    </Canvas>
+</>
+`;
+
+var _default = Handlebars.compile(template);
+
 exports.default = _default;
+},{}],"src/page/dogHall.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
 var _fiber = require("@react-three/fiber");
 
+var _dogHall = _interopRequireDefault(require("./dogHall.template"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import {OrbitControls} from '@react-three/drei';
-function _default() {
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_fiber.Canvas, null, /*#__PURE__*/_react.default.createElement(CoinMesh, null)));
+class dogHall {
+  #template = _dogHall.default;
+  #data;
+  #container;
+
+  constructor(container, data) {
+    this.#container = document.querySelector(container);
+    this.#data = data;
+    this.#initialize();
+  }
+
+  #initialize = () => {};
+  render = () => {
+    this.#container.innerHTML = this.#template({//userProfile: this.#data.store.userProfile,
+      //posts: this.#data.store.userPosts,
+    });
+  };
 }
 
-function CoinMesh() {
-  const mesh = useRef(null);
-  (0, _fiber.useFrame)(() => mesh.current.rotation.y = mesh.current.rotation.z += 0.01); // #2
-
-  return /*#__PURE__*/_react.default.createElement("mesh", {
-    ref: mesh,
-    scale: 0.7
-  }, /*#__PURE__*/_react.default.createElement("cylinderBufferGeometry", {
-    args: [1, 1, 0.3, 50]
-  }), " // #1", /*#__PURE__*/_react.default.createElement("meshLambertMaterial", {
-    attach: "material",
-    color: "#ff9800"
-  }));
-}
-},{"react":"node_modules/react/index.js","@react-three/fiber":"../../node_modules/@react-three/fiber/dist/react-three-fiber.esm.js"}],"src/index.js":[function(require,module,exports) {
+exports.default = dogHall;
+},{"react":"node_modules/react/index.js","@react-three/fiber":"../../node_modules/@react-three/fiber/dist/react-three-fiber.esm.js","./dogHall.template":"src/page/dogHall.template.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _store = _interopRequireDefault(require("./store"));
@@ -96162,7 +96184,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8843" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2739" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
