@@ -5,6 +5,7 @@ import PageNotFound from './page/page-not-found';
 import Singup from './page/signup';
 import Pick from './page/pick';
 import Doginfo from './page/doginfo';
+import DogAuthorization from './page/dogauthorization'
 import dogHall from './page/dogHall';
 
 
@@ -29,6 +30,10 @@ function router() {
     case '#/signup':
       const signup = new Singup('#root', { store });
       signup.render();
+      break;
+    case '#/dog-authorization':
+      const dogAuthorization = new DogAuthorization('#root', { store });
+      dogAuthorization.render();
       break;
     case '#/doginfo':
       const doginfo = new Doginfo('#root', { store });
